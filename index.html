@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#090b1d">
+<title>SuperNovaPlayBR2026 | Add-ons</title>
+
+<style>
+:root{
+--bg:#080a19;--panel:#11152d;--blue:#36a5ff;
+--purple:#9b5cff;--text:#f5f6ff;
+--muted:#aab1d0;--line:#2b3158
+}
+*{box-sizing:border-box}
+body{
+margin:0;background:radial-gradient(ellipse at 15% 0%,#20205a,transparent 38%),var(--bg);
+color:var(--text);font-family:Arial,sans-serif;min-height:100vh
+}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer}
+.top{position:sticky;top:0;z-index:5;background:#090b1def;border-bottom:1px solid var(--line)}
+.nav{max-width:1100px;margin:auto;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.brand{font-weight:900;font-size:18px}
+.brand span{background:linear-gradient(90deg,var(--blue),var(--purple));background-clip:text;color:transparent}
+.navlinks{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+button{background:transparent;border:1px solid var(--line);color:var(--text);padding:10px 13px;border-radius:10px}
+.primary{border:0;background:linear-gradient(100deg,#258cff,#884cff);color:white;font-weight:bold}
+.wrap{max-width:1100px;margin:auto;padding:30px 18px 60px}
+.hero{padding:45px 30px;border:1px solid #44418a;border-radius:24px;background:linear-gradient(120deg,#151b43,#211344)}
+h1{font-size:clamp(32px,6vw,55px);margin:12px 0;background:linear-gradient(90deg,#fff,#9bcaff,#c69bff);background-clip:text;color:transparent}
+p{color:var(--muted);line-height:1.6}
+.section-title{margin:35px 0 15px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}
+.card{background:linear-gradient(145deg,#151a36,#101329);border:1px solid var(--line);padding:19px;border-radius:17px}
+.card h3{margin:10px 0}
+.panel{margin-top:22px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+label{display:block;font-size:13px;color:#cbd0eb;margin:12px 0 6px}
+input,textarea,select{
+width:100%;padding:12px;border-radius:10px;border:1px solid var(--line);
+background:#090d20;color:white;outline:none
+}
+textarea{min-height:100px;resize:vertical}
+input:focus,textarea:focus{border-color:var(--blue)}
+.full{grid-column:1/-1}
+.submit{width:100%;margin-top:15px}
+.status{font-size:13px;margin-top:12px;color:#ff9baf}
+.ok{color:#7df0bd}
+.addon-card{overflow:hidden}
+.addon-card img{width:100%;height:170px;object-fit:cover;border-radius:10px;background:#090d20}
+.addon-card .download{display:block;text-align:center;text-decoration:none;margin-top:12px}
+.profile{display:none;align-items:center;gap:8px;font-size:13px}
+.modal{position:fixed;inset:0;background:#03040dcc;display:none;align-items:center;justify-content:center;padding:18px;z-index:10}
+.modal.show{display:flex}
+.dialog{width:min(430px,100%);background:#11152d;border:1px solid #45417e;border-radius:20px;padding:24px}
+.dialog-head{display:flex;justify-content:space-between;align-items:center}
+.close{font-size:22px}
+.tabs{display:flex;gap:8px;margin:18px 0}
+.tabs button{flex:1}
+.tabs button.active{background:#29235b;border-color:#765bff}
+.hint{font-size:12px}
+footer{text-align:center;color:#828aaa;padding:25px;border-top:1px solid var(--line)}
+@media(max-width:760px){
+.grid,.form-grid{grid-template-columns:1fr}
+.full{grid-column:auto}
+.hero{padding:30px 20px}
+.nav{padding:12px}
+.brand{font-size:15px}
+}
+</style>
+</head>
+
+<body>
+
+<header class="top">
+<nav class="nav">
+<div class="brand">🌠 <span>SuperNovaPlayBR2026</span></div>
+<div class="navlinks">
+<button onclick="goTo('inicio')">Início</button>
+<button onclick="goTo('biblioteca')">Add-ons</button>
+<button onclick="goTo('publicar')">Enviar add-on</button>
+<button class="primary" id="accountBtn" onclick="openModal()">Entrar / Cadastrar</button>
+<div class="profile" id="profile">
+<strong id="profileName"></strong>
+<button onclick="logout()">Sair</button>
+</div>
+</div>
+</nav>
+</header>
+
+<main class="wrap" id="inicio">
+
+<section class="hero">
+<div>🌌 COMUNIDADE MINECRAFT BEDROCK</div>
+<h1>SuperNovaPlayBR2026</h1>
+<p>Descubra, publique e compartilhe add-ons para Minecraft Bedrock!</p>
+<button class="primary" onclick="goTo('biblioteca')">📦 Explorar add-ons</button>
+<button onclick="goTo('publicar')">📤 Publicar conteúdo</button>
+</section>
+
+<h2 class="section-title">🌟 Nossa plataforma</h2>
+<section class="grid">
+<article class="card">
+<h3>📦 Biblioteca</h3>
+<p>Encontre add-ons publicados pela comunidade.</p>
+</article>
+<article class="card">
+<h3>📤 Publicações</h3>
+<p>Compartilhe seus próprios projetos Minecraft.</p>
+</article>
+<article class="card">
+<h3>🌌 Comunidade</h3>
+<p>Um espaço para criadores e jogadores.</p>
+</article>
+</section>
+
+<section id="publicar" class="panel">
+<h2 class="section-title">📤 Enviar novo add-on</h2>
+<div class="card">
+<form id="uploadForm">
+<label for="addonTitle">Nome do add-on</label>
+<input id="addonTitle" maxlength="80" required placeholder="Ex: Chaos Craft">
+
+<label for="addonDescription">Descrição</label>
+<textarea id="addonDescription" maxlength="2000" required placeholder="Descreva seu add-on..."></textarea>
+
+<div class="form-grid">
+<div>
+<label for="minecraftVersion">Versão do Minecraft</label>
+<input id="minecraftVersion" required placeholder="Ex: Bedrock 1.21">
+</div>
+<div>
+<label for="addonFile">Arquivo do add-on</label>
+<input id="addonFile" type="file" accept=".mcaddon,.mcpack,.zip" required>
+</div>
+<div class="full">
+<label for="coverFile">Imagem de capa (opcional)</label>
+<input id="coverFile" type="file" accept="image/png,image/jpeg,image/webp">
+</div>
+</div>
+
+<button class="primary submit" id="uploadButton" type="submit">🚀 Publicar add-on</button>
+<div class="status" id="uploadStatus"></div>
+</form>
+<p class="hint">Formatos aceitos: MCADDON, MCPACK e ZIP. Publique somente arquivos que você tem autorização para compartilhar.</p>
+</div>
+</section>
+
+<section id="biblioteca">
+<h2 class="section-title">📦 Biblioteca de add-ons</h2>
+<div id="addonList" class="grid">
+<div class="card">Carregando publicações...</div>
+</div>
+<div id="libraryStatus" class="status"></div>
+</section>
+
+</main>
+
+<footer>© 2026 SuperNovaPlayBR2026 • Comunidade Minecraft 💙💜</footer>
+
+<div class="modal" id="modal">
+<div class="dialog">
+<div class="dialog-head">
+<h2 id="modalTitle">Acesse sua conta</h2>
+<button class="close" onclick="closeModal()">×</button>
+</div>
+
+<div class="tabs">
+<button id="loginTab" class="active" onclick="setMode('login')">Login</button>
+<button id="registerTab" onclick="setMode('register')">Cadastro</button>
+</div>
+
+<form id="authForm">
+<label for="username">Nome de usuário</label>
+<input id="username" maxlength="24" autocomplete="username" required placeholder="Seu nome de usuário">
+
+<label for="password">Senha</label>
+<input id="password" type="password" minlength="6" autocomplete="current-password" required placeholder="Mínimo de 6 caracteres">
+
+<button class="primary submit" type="submit" id="authButton">Entrar</button>
+<div class="status" id="authStatus"></div>
+</form>
+<p class="hint">Sua conta será protegida pelo sistema de autenticação do Supabase.</p>
+</div>
+</div>
+
+<!-- Biblioteca oficial do Supabase -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+// ======================================
+// CONFIGURAÇÃO DO SUPABASE
+// COLOQUE A URL E A CHAVE PUBLICÁVEL
+// DO SEU PRÓPRIO PROJETO.
+// ======================================
+
+const SUPABASE_URL = "COLOQUE_A_URL_DO_SEU_PROJETO";
+const SUPABASE_KEY = "COLOQUE_SUA_CHAVE_PUBLICAVEL";
+
+const BUCKET = "addons";
+
+const supabaseReady =
+SUPABASE_URL.startsWith("https://") &&
+!SUPABASE_URL.includes("COLOQUE_") &&
+!SUPABASE_KEY.includes("COLOQUE_");
+
+const db = supabaseReady
+? window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY)
+: null;
+
+const $ = id => document.getElementById(id);
+let mode = "login";
+let currentUser = null;
+
+function goTo(id){
+$(id).scrollIntoView({behavior:"smooth"});
+}
+
+function openModal(){
+$("modal").classList.add("show");
+setMode("login");
+}
+
+function closeModal(){
+$("modal").classList.remove("show");
+}
+
+function setMode(next){
+mode=next;
+$("loginTab").classList.toggle("active",mode==="login");
+$("registerTab").classList.toggle("active",mode==="register");
+$("authButton").textContent=mode==="register"?"Criar conta":"Entrar";
+$("modalTitle").textContent=mode==="register"?"Crie sua conta":"Acesse sua conta";
+$("authStatus").textContent="";
+}
+
+function setStatus(id,message,success=false){
+$(id).textContent=message;
+$(id).className=success?"status ok":"status";
+}
+
+// O Supabase Auth usa e-mail internamente.
+// O usuário só precisa informar seu nome e senha.
+// O endereço abaixo é interno e não precisa ser acessado.
+function usernameToEmail(username){
+return username.toLowerCase()+"@users.supernovaplaybr2026.com";
+}
+
+function validUsername(username){
+return /^[a-zA-Z0-9_]{3,24}$/.test(username);
+}
+
+function showUser(user){
+currentUser=user;
+$("accountBtn").style.display="none";
+$("profile").style.display="flex";
+$("profileName").textContent=
+user.user_metadata?.username || user.email.split("@")[0];
+}
+
+function hideUser(){
+currentUser=null;
+$("accountBtn").style.display="inline-block";
+$("profile").style.display="none";
+}
+
+async function loadSession(){
+if(!db)return;
+const {data,error}=await db.auth.getSession();
+if(error){console.error(error);return;}
+if(data.session)showUser(data.session.user);
+else hideUser();
+}
+
+$("authForm").addEventListener("submit",async e=>{
+e.preventDefault();
+
+if(!db){
+setStatus("authStatus","Configure a URL e a chave pública do Supabase.");
+return;
+}
+
+const username=$("username").value.trim();
+const password=$("password").value;
+
+if(!validUsername(username)){
+setStatus("authStatus","Use de 3 a 24 letras, números ou underline no nome.");
+return;
+}
+
+const email=usernameToEmail(username);
+$("authButton").disabled=true;
+setStatus("authStatus","Aguarde...");
+
+try{
+if(mode==="register"){
+const {data,error}=await db.auth.signUp({
+email,
+password,
+options:{data:{username}}
+});
+
+if(error)throw error;
+
+if(data.session){
+showUser(data.user);
+closeModal();
+}else{
+setStatus("authStatus","Cadastro recebido. Verifique a configuração de confirmação de e-mail no Supabase.",true);
+}
+}else{
+const {data,error}=await db.auth.signInWithPassword({
+email,password
+});
+
+if(error)throw error;
+showUser(data.user);
+closeModal();
+}
+}catch(error){
+setStatus("authStatus",error.message || "Não foi possível acessar sua conta.");
+}finally{
+$("authButton").disabled=false;
+}
+});
+
+async function logout(){
+if(db)await db.auth.signOut();
+hideUser();
+}
+
+function safeText(value){
+return String(value ?? "");
+}
+
+async function publishAddon(event){
+event.preventDefault();
+
+if(!db){
+setStatus("uploadStatus","Configure primeiro o Supabase.");
+return;
+}
+
+const {data:{user}}=await db.auth.getUser();
+
+if(!user){
+setStatus("uploadStatus","Entre na sua conta antes de publicar.");
+openModal();
+return;
+}
+
+const title=$("addonTitle").value.trim();
+const description=$("addonDescription").value.trim();
+const version=$("minecraftVersion").value.trim();
+const file=$("addonFile").files[0];
+const cover=$("coverFile").files[0];
+
+if(!file){
+setStatus("uploadStatus","Selecione o arquivo do add-on.");
+return;
+}
+
+const extension=file.name.split(".").pop().toLowerCase();
+
+if(!["mcaddon","mcpack","zip"].includes(extension)){
+setStatus("uploadStatus","Formato inválido. Use MCADDON, MCPACK ou ZIP.");
+return;
+}
+
+if(file.size>50*1024*1024){
+setStatus("uploadStatus","O arquivo ultrapassa 50 MB.");
+return;
+}
+
+if(cover && !["image/jpeg","image/png","image/webp"].includes(cover.type)){
+setStatus("uploadStatus","A capa deve ser JPG, PNG ou WEBP.");
+return;
+}
+
+$("uploadButton").disabled=true;
+setStatus("uploadStatus","Enviando arquivo...");
+
+try{
+const safeName=file.name.replace(/[^a-zA-Z0-9._-]/g,"_");
+const filePath=user.id+"/"+crypto.randomUUID()+"-"+safeName;
+
+const {error:fileError}=await db.storage
+.from(BUCKET)
+.upload(filePath,file,{upsert:false});
+
+if(fileError)throw fileError;
+
+let coverPath=null;
+
+if(cover){
+const coverName=cover.name.replace(/[^a-zA-Z0-9._-]/g,"_");
+coverPath=user.id+"/"+crypto.randomUUID()+"-"+coverName;
+
+const {error:coverError}=await db.storage
+.from(BUCKET)
+.upload(coverPath,cover,{upsert:false});
+
+if(coverError)throw coverError;
+}
+
+const {error:insertError}=await db
+.from("addons")
+.insert({
+title,
+description,
+minecraft_version:version,
+file_path:filePath,
+cover_path:coverPath,
+author_id:user.id
+});
+
+if(insertError)throw insertError;
+
+$("uploadForm").reset();
+setStatus("uploadStatus","Add-on publicado com sucesso! 🚀",true);
+await loadAddons();
+
+}catch(error){
+setStatus("uploadStatus","Erro ao publicar: "+error.message);
+}finally{
+$("uploadButton").disabled=false;
+}
+}
+
+$("uploadForm").addEventListener("submit",publishAddon);
+
+async function loadAddons(){
+if(!db){
+$("addonList").innerHTML='<div class="card">Configure o Supabase para carregar a biblioteca.</div>';
+return;
+}
+
+const {data,error}=await db
+.from("addons")
+.select("*")
+.order("created_at",{ascending:false});
+
+if(error){
+$("addonList").textContent="Erro ao carregar: "+error.message;
+return;
+}
+
+$("addonList").replaceChildren();
+
+if(!data.length){
+$("addonList").innerHTML='<div class="card">Ainda não há add-ons publicados. Seja o primeiro!</div>';
+return;
+}
+
+for(const addon of data){
+const card=document.createElement("article");
+card.className="card addon-card";
+
+const title=document.createElement("h3");
+title.textContent=addon.title;
+
+const description=document.createElement("p");
+description.textContent=addon.description;
+
+const version=document.createElement("p");
+version.textContent="Minecraft: "+addon.minecraft_version;
+
+const author=document.createElement("p");
+author.textContent="Publicado em "+new Date(addon.created_at).toLocaleDateString("pt-BR");
+
+if(addon.cover_path){
+const {data:imageData}=db.storage.from(BUCKET).getPublicUrl(addon.cover_path);
+const img=document.createElement("img");
+img.src=imageData.publicUrl;
+img.alt="Capa de "+addon.title;
+card.appendChild(img);
+}
+
+const {data:fileData}=db.storage.from(BUCKET).getPublicUrl(addon.file_path);
+
+const download=document.createElement("a");
+download.href=fileData.publicUrl;
+download.target="_blank";
+download.rel="noopener";
+download.className="primary download";
+download.textContent="📥 Baixar add-on";
+
+card.append(title,description,version,author,download);
+$("addonList").appendChild(card);
+}
+}
+
+$("modal").addEventListener("click",e=>{
+if(e.target===$("modal"))closeModal();
+});
+
+async function start(){
+if(!db){
+$("addonList").innerHTML='<div class="card">Configure o Supabase para ativar a biblioteca.</div>';
+setStatus("libraryStatus","Aguardando configuração do Supabase.");
+return;
+}
+
+await loadSession();
+await loadAddons();
+
+db.auth.onAuthStateChange((_event,session)=>{
+if(session)showUser(session.user);
+else hideUser();
+});
+}
+
+start();
+</script>
+</body>
+</html>
